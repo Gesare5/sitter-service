@@ -1,2 +1,2 @@
 # Find a Sitter
-An App to Match Sitters with Clients Requiring Sitting Service
+An App that matches Sitters with Clients Requiring Sitting Service
