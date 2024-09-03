@@ -2,7 +2,7 @@
 An App that matches Sitters with Clients Requiring Sitting(pet/house) Service
 
 
-### What It Does
+## <u> What It Does </u>
 * Enables a Sitter to view/retrieve their own profile
 * Enables a Sitter to Decline a service request
 * Enables a Sitter to Accept a service request
@@ -18,7 +18,7 @@ An App that matches Sitters with Clients Requiring Sitting(pet/house) Service
 * Documents created endpoints
 
 
-### Service Request Flow
+## <u> Service Request Flow </u>
 ![flowchart](https://github.com/user-attachments/assets/2fde814b-62b6-4bba-8f0f-807db9a5b24d)
 
 
