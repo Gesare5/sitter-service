@@ -37,6 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # 3rd party
+    'rest_framework',
+
+     # Internal Apps
+    "sitter_request.apps.SitterRequestConfig",
+    "sitter.apps.SitterConfig",
+    'sitter_requester.apps.SitterRequesterConfig',
 ]
 
 MIDDLEWARE = [
