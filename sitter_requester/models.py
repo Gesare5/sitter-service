@@ -9,6 +9,8 @@ class SitterRequester(models.Model):
     service_type = models.CharField(max_length=100, null=True)
     town = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
 
 # sitter_requester_id = models.CharField(primary_key=True, null=False) #set as pk and use uuid

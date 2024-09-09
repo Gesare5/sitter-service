@@ -13,6 +13,9 @@ class SitterRequest(models.Model):
     attempt_sitter_pair_id = models.CharField(max_length=200)
     paired_sitter_id = models.CharField(max_length=200)
     number_of_pets = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
 
 
     #     request_id = models.CharField(primary_key=True, null=False) #set as pk and use uuid
