@@ -18,15 +18,20 @@ class SitterRequestListView(APIView):
     """
 
     def get(self, request, format=None):
-        # sitter_requester_id  figure this out
         # name = request.query_params.get("name") -queryparms
+        sitter_requester_id = {"sitter_requester_id": request.data.get("sitter_requester_id")}
         paired_sitter_id = {"paired_sitter_id": request.data.get("paired_sitter_id")}
-        if paired_sitter_id:
-            sitter_requests = SitterRequest.objects.filter(paired_sitter_id=paired_sitter_id)
-        else:
-            sitter_requests = SitterRequest.objects.all()
-        serializer = SitterRequestSerializer(sitter_requests, many=True)
-        return Response(serializer.data)
+        try:
+            if paired_sitter_id:
+                sitter_requests = SitterRequest.objects.filter(paired_sitter_id=paired_sitter_id)
+            elif sitter_requester_id:
+                sitter_requests = SitterRequest.objects.filter(sitter_requester_id=sitter_requester_id)
+            else:    
+                raise Http404
+            serializer = SitterRequestSerializer(sitter_requests, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None):
         """
