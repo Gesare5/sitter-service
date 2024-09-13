@@ -43,3 +43,25 @@ class SitterRequestListView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SitterRequestDetailView(APIView):
+    """
+    Update Sitter Request details
+    Retrieve Sitter Request,
+    Change detail,
+    Save changes to db
+    """
+
+    def get_object(self, pk):
+        try:
+            return SitterRequest.objects.get(pk=pk)
+        except SitterRequest.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        sitter_request = self.get_object(pk)
+        serializer = SitterRequestSerializer(sitter_request)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    
