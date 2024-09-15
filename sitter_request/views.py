@@ -64,4 +64,12 @@ class SitterRequestDetailView(APIView):
         serializer = SitterRequestSerializer(sitter_request)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    
+    def put(self, request, pk, format=None):
+        sitter_request = self.get_object(pk)
+        if not sitter_request:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer = SitterRequestSerializer(sitter_request, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
