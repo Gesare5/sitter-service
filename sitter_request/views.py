@@ -37,7 +37,12 @@ class SitterRequestListView(APIView):
         """
         Create the sitter_request with given data
         """
-        data = {"name": request.data.get("name")}
+        data = {"service_date": request.data.get("service_date"),
+                "service_type": request.data.get("service_type"),
+                "country": request.data.get("country"),
+                "town": request.data.get("town"),
+                "name": request.data.get("name")}
+        
         serializer = SitterRequestSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -73,3 +78,9 @@ class SitterRequestDetailView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk, format=None):
+        sitter_request = self.get_object(pk)
+        sitter_request.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
