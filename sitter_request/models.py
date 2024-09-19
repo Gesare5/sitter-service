@@ -5,6 +5,14 @@ import uuid
 from sitter_requester.models import SitterRequester
 
 class SitterRequest(models.Model):
+    status_types = (
+    (0, "Created"),
+    (1, "Matched"),
+    (2, "Completed"),
+    (3, "Canceled"),
+    )
+    
+
     id = models.UUIDField(default=uuid.uuid4, unique=True,
           primary_key=True, editable=False)
     service_type = models.CharField(max_length=100, null=True)
@@ -17,9 +25,8 @@ class SitterRequest(models.Model):
     number_of_pets = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    status = models.IntegerField(default=0)
-    
-
+    status = models.IntegerField(choices=status_types, default=0)
+  
 
 
 
