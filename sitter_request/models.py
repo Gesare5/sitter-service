@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 import uuid
 
@@ -25,7 +26,7 @@ class SitterRequest(models.Model):
     attempt_sitter_pair_id = models.CharField(max_length=200)    #should be null
     paired_sitter_id = models.CharField(max_length=200)           #should be null
     number_of_pets = models.IntegerField(default=1)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=status_types, default=0)
   
