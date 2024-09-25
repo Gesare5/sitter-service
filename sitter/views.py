@@ -21,3 +21,20 @@ class SitterListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SitterChoiceListView(APIView):
+    """
+    A simple view for viewing all sitter_requests
+    """
+
+    def get(self, request, format=None):
+        try:
+            town = request.data.get("town")
+            country = request.data.get("country")
+            sitters = Sitter.objects.filter(town=town, country=country)  # check and vs or filter operations
+            
+            serializer = SitterSerializer(sitters, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
