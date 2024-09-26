@@ -19,8 +19,8 @@ class SitterRequestListView(APIView):
 
     def get(self, request, format=None):
         status = request.query_params.get("status") #from queryparms
-        sitter_requester_id = {"sitter_requester_id": request.data.get("sitter_requester_id")}  #from body
-        paired_sitter_id = {"paired_sitter_id": request.data.get("paired_sitter_id")}           
+        sitter_requester_id = request.data.get("sitter_requester_id") #from body
+        paired_sitter_id = request.data.get("paired_sitter_id")         
         try:
             if paired_sitter_id:
                 sitter_requests = SitterRequest.objects.filter(paired_sitter_id=paired_sitter_id, status=status)
