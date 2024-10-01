@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import Http404
-from rest_framework import viewsets, status
-from rest_framework import filters
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import datetime
@@ -18,20 +17,21 @@ class SitterRequestListView(APIView):
     """
 
     def get(self, request, format=None):
-        status = request.query_params.get("status") #from queryparms
-        sitter_requester_id = request.data.get("sitter_requester_id") #from body
-        paired_sitter_id = request.data.get("paired_sitter_id")         
-        try:
-            if paired_sitter_id:
-                sitter_requests = SitterRequest.objects.filter(paired_sitter_id=paired_sitter_id, status=status)
-            elif sitter_requester_id:
-                sitter_requests = SitterRequest.objects.filter(sitter_requester_id=sitter_requester_id, status=status)
-            else:    
-                raise Http404
-            serializer = SitterRequestSerializer(sitter_requests, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # request_status = request.query_params.get("status") #from queryparms
+        # sitter_requester_id = request.data.get("sitter_requester_id") #from body
+        # paired_sitter_id = request.data.get("paired_sitter_id")   
+        # try:    
+        #     if paired_sitter_id:
+        #         sitter_requests = SitterRequest.objects.filter(paired_sitter_id=paired_sitter_id, status=request_status)
+        #     elif sitter_requester_id:
+        #         sitter_requests = SitterRequest.objects.filter(sitter_requester_id=sitter_requester_id, status=request_status)
+        #     else:    
+        sitter_requests = SitterRequest.objects.all() #filter by user 
+
+        serializer = SitterRequestSerializer(sitter_requests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        # except:
+            # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None):
         """
@@ -84,6 +84,32 @@ class SitterRequestDetailView(APIView):
         sitter_request.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class SitterRequestAttemptPairView(APIView):
+    """
+    Get Request Object 
+    Set attempt_sitter_pair_id
+    save
+    """                                            
+
+    def get_object(self, pk):
+        try:
+            return SitterRequest.objects.get(pk=pk)
+        except SitterRequest.DoesNotExist:
+            raise Http404
+        
+    def put(self, request, pk, format=None):
+        sitter_request = self.get_object(pk)
+        if not sitter_request:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = SitterRequestSerializer(sitter_request, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 class SitterRequestPairView(APIView):
     """
@@ -100,18 +126,15 @@ class SitterRequestPairView(APIView):
         
     def put(self, request, pk, format=None):
         sitter_request = self.get_object(pk)
-        request.data["updated_at"] = datetime.datetime.now()
         if not sitter_request:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         
         serializer = SitterRequestSerializer(sitter_request, data=request.data)
-        # print out this serializer data
-        print('SitterRequestPairView', serializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
         
 class SitterRequestCancelView(APIView):
@@ -129,7 +152,6 @@ class SitterRequestCancelView(APIView):
         
     def put(self, request, pk, format=None):
         sitter_request = self.get_object(pk)
-        request.data["updated_at"] = datetime.datetime.now()
         if not sitter_request:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
