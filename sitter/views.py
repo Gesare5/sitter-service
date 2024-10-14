@@ -21,6 +21,28 @@ class SitterListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def post(self, request, format=None):
+        """
+        Create the sitter with given data
+        """
+        # data = {"first_name": request.data.get("first_name"),
+        #         "service_type": request.data.get("service_type"),
+        #         "country": request.data.get("country"),
+        #         "town": request.data.get("town"),
+        #         "name": request.data.get("name")}
+        # print('validateddata', request.data)
+        
+        print('serializer calling')
+        serializer = SitterSerializer(data=request.data)
+        print('serializer called')
+        print(serializer)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 class SitterChoiceListView(APIView):
